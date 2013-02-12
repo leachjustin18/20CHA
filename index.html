@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    </head>
+    <body>
+       <div id="wrapper"> 
+     <div id="test">
+      <div id="scenarioP"></div>
+        <div id="introParagraph"></div>
+      
+  <span id="questionInstructions" class="instructions"></span>
+  <div id="questionAnswers"></div>
+
+<div id="remediation">
+  <div id="remediationResponse"></div>
+</div>
+
+</div>
+ </div>  
+ 
+<script type="text/javascript" charset="utf-8" async>
+(function() {
+
+	var scenarios = {
+		scenario: '',
+		questions: [{
+			type: 'checkbox',
+			text: ' Which of the following should the clinician do to manage hyperthermia?',
+			answerChoices: [{
+				choice: 'Remove anything that may block heat loss.'
+			}, {
+				choice: 'Assess temperature probe positioning for appropriate location.'
+			}, {
+				choice: 'Remove external heat sources.'
+			}, {
+				choice: 'Check the incubator or radiant warmer for appropriate functioning.'
+			}, {
+				choice: 'Treat the underlying causes (e.g. infection, dehydration, central nervous sytem&nbsp;disorder).'
+			}, {
+				choice: 'During the cooling process, monitor and record the temperature every 30 minutes (skin, axillary).'
+			}, {
+				choice: 'Remove excess bundling/swaddling materials.'
+			}],
+			answers: {
+				correct: [0, 1, 2, 3, 4, 5, 6]
+			},
+			remediation: {
+				correct: 'You would do all of the above to manage hyperthermia.',
+				incorrect: 'You would do all of the above to manage hyperthermia..'
+			}
+		}]
+	}
+
+	var $sel = {
+		scenarioParagraph: $('#scenarioP'),
+		introParagraph: $('#introParagraph')
+	};
+
+	//Fire off first function 
+	var questionNumber = 0;
+	loadScenario(questionNumber);
+
+	function loadScenario(questionNumber) {
+		var scenarioQuestions = scenarios.questions[questionNumber];
+		//Load scenrio instructions
+		$('#questionInstructions').text(scenarioQuestions.text);
+		//Load scenrio text 
+		$sel.introParagraph.text(scenarios.scenario);
+		// Load scneario information
+		loadAnswers(scenarioQuestions);
+	}
+
+	function loadAnswers(scenarioQuestions) {
+		// Loop through question answers and append to HTML
+		var inputCheckAnswer = $('<input type="submit" class="submit disable" id="checkButton" value="Check Answer"/>');
+		//Check if it's checkbox test, if so show check answer button
+		if(scenarioQuestions.type === 'checkbox') {
+			$('#remediation').prepend(inputCheckAnswer);
+		}
+		//Loop to append all input fields and answers and append to questionAnswers id
+		for(var a = 0; a < scenarioQuestions.answerChoices.length; a++) {
+			$('#questionAnswers').append('<div class="inputWrap"><input type=' + scenarioQuestions.type + ' class="disable checkBox" value= "' + questionNumber + '" id="' + [a] + '" name = "q' + questionNumber + '"  /></div>', $('<div class="answerChoice">' + scenarioQuestions.answerChoices[a].choice + '</div>'));
+		}
+		checkQuestion(scenarioQuestions, inputCheckAnswer);
+	}
+
+	function checkQuestion(scenarioQuestions, inputCheckAnswer) {
+		var correctAnswer = '<div class="correct answers"><div class="sectionTitle">Correct!</div> ' + scenarioQuestions.remediation.correct + '</div>',
+			incorrectAnswer = '<div class="incorrect answers"><div class="sectionTitle">Incorrect</div> ' + scenarioQuestions.remediation.incorrect + '</div>';
+
+		$('#checkButton').on('click', function() {
+			//Disable checkboxes and submit button 
+			$('.disable').prop('disabled', true);
+			//Grab the name values from the checkboxes and make them into an actual array with map
+			var values = $('.checkBox:checked').map(function() {
+				return this.id;
+			}).get();
+			var correctAnswers = 0;
+			for(var a = 0; a < scenarioQuestions.answers.correct.length; a++) {
+				//Check answers 
+				if(values[a] == scenarioQuestions.answers.correct[a]) {
+					//Add to variable, if it's the correct amount, the if statment below will be true 
+					correctAnswers++;
+				}
+			}
+			//Hide Check Answers button
+			inputCheckAnswer.hide();
+			if(correctAnswers === scenarioQuestions.answers.correct.length) {
+				$('#remediationResponse').append(correctAnswer);
+			} else {
+				$('#remediationResponse').append(incorrectAnswer);
+			}
+		});
+	}
+})();
+        </script>
+    </body>
+</html>	

@@ -1,0 +1,46 @@
+body {
+font-family:Arial, Helvetica, sans-serif;
+font-size:13px
+}
+
+#wrapper {width:550px}
+.instructions {font-style:italic}
+.hidden {display:none}
+.sectionTitle {font-weight:700}
+.qActive {color:#000}
+
+.correct {
+background:#CFC;
+border:1px solid #090
+}
+
+.incorrect {
+background:#FFD2CC;
+border:1px solid #991200
+}
+
+.answers {
+float:left;
+margin-top:10px;
+padding:10px
+}
+
+.answerChoice {
+float:left;
+margin-bottom:10px;
+width:90%
+}
+
+.inputWrap {
+float:left;
+width:10%
+}
+
+input {
+margin:2px 0 0 10px;
+padding:0
+}
+
+.submit {padding:5px;}
+#test,.qText {padding-bottom:20px}
+#questionAnswers {padding-top: 10px}
